@@ -50,6 +50,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          NOTES=$(printf 'Fork build of MtkWlanNative for the MSI Stealth A16 AI+ (MT7925, branch stealth-a16): adds sleep and wake handling.\nBuilt by GitHub Actions on %s with %s. Not tested on hardware by the CI.\nSee CHANGELOG.md for what changed against upstream.\n' "$(sw_vers -productVersion)" "$(xcodebuild -version | head -1)")
+          NOTES=$(printf 'Fork build of MtkWlanNative for the MSI Stealth A16 AI+ (MT7925, branch stealth-a16): no code change, pairs with the MtkWlan fork that adds sleep and wake. Still locked to macOS 26.7.1 (25G241).\nBuilt by GitHub Actions on %s with %s. Not tested on hardware by the CI.\nSee CHANGELOG.md for what changed against upstream.\n' "$(sw_vers -productVersion)" "$(xcodebuild -version | head -1)")
           gh release create "$GITHUB_REF_NAME" "${{ steps.pkg.outputs.zip }}" dist/SHA256SUMS.txt \
             --title "MtkWlanNative ${GITHUB_REF_NAME#v}" --notes "$NOTES" --verify-tag
