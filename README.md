@@ -56,7 +56,7 @@ network before sleep: the link callback reports down, a join in flight gets its 
 a running scan its `scan_done` (-1), and this kext tells the Family as for any link loss (0xd8 down). On wake the core
 reloads the firmware and rejoins the wanted network by itself; this kext announces the restored link with the full join
 sequence, exactly as after a core reload. If macOS left the network before sleep, its auto-join after wake goes through
-`WCL_ASSOCIATE` as usual (the core answers busy, and the Family retries, only while the wake bring-up still runs). A
+`WCL_ASSOCIATE` as usual (a request that arrives during the wake bring-up waits for it on the core's gate; after a failed wake the core answers "not ready"). A
 private address macOS sets while the core sleeps is stored and used at wake. Not tested on hardware yet.
 
 ## Requirements
