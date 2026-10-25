@@ -45,9 +45,19 @@ WPA2-PSK through the Wi-Fi menu works: oliverchu joined a WPA/WPA2 Personal netw
 ([#3](https://github.com/watchthelight-labs/mt7925-hackintosh-wifi-native/issues/3)).
 
 What's missing: no roaming (the Family asks us to associate to one access point and we do that),
-no 802.11ax/be, no sleep, no AirDrop/Continuity (no AWDL interface), no WPA3-SAE, no enterprise, Country Code is reported
+no 802.11ax/be, no sleep of its own (the `stealth-a16` fork of MtkWlan handles sleep and wake in the core, see below), no AirDrop/Continuity (no AWDL interface), no WPA3-SAE, no enterprise, Country Code is reported
 as XZ. The captive-portal flow is macOS's own: on a portal network the Captive Network Assistant opens and the interface
 is ranked "Never" until you log in, as on a real Mac.
+
+## Sleep and wake (stealth-a16 fork)
+
+This kext has no power code of its own and needs none. With the `stealth-a16` fork of MtkWlan the core leaves the
+network before sleep: the link callback reports down, a join in flight gets its `join_result` (`MTK_JOIN_AP_LEFT`) and
+a running scan its `scan_done` (-1), and this kext tells the Family as for any link loss (0xd8 down). On wake the core
+reloads the firmware and rejoins the wanted network by itself; this kext announces the restored link with the full join
+sequence, exactly as after a core reload. If macOS left the network before sleep, its auto-join after wake goes through
+`WCL_ASSOCIATE` as usual (the core answers busy, and the Family retries, only while the wake bring-up still runs). A
+private address macOS sets while the core sleeps is stored and used at wake. Not tested on hardware yet.
 
 ## Requirements
 

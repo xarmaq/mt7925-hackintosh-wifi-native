@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.13-stealth.1 (fork `xarmaq/mt7925-hackintosh-wifi-native`, branch `stealth-a16`, 2026-10-25)
+
+- No code change. Checked against the sleep and wake support of the MtkWlan fork (0.12.1-stealth.1): the core reports
+  the link down through the existing `link` callback before sleep and rejoins after wake, which this kext already turns
+  into a 0xd8 link-down event and a re-announced join ("link restored by core"); a join in flight ends through
+  `join_result`, a scan through `scan_done`; `set_mac` during sleep is accepted by the core. README section added.
+- CI: `.github/workflows/stealth.yml` builds with `ABI=25G241 ./build.sh` and publishes stealth tags as releases.
+- Still built for and locked to 25G241 (macOS 26.7.1); on any other build it declines and the core keeps its Ethernet
+  front end.
+
 ## Unreleased
 
 - System Information showed "Firmware Version: MtkWlanNative 0.4.11" on 0.4.12 and 0.4.13: `MTK_NATIVE_VERSION` was not bumped. It reads 0.4.13 now, and `build.sh` stops when it and Info.plist differ (seen in the report on [#3](https://github.com/watchthelight-labs/mt7925-hackintosh-wifi-native/issues/3)).
